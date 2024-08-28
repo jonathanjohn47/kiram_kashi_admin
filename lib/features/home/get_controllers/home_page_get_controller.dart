@@ -35,15 +35,15 @@ class HomePageGetController extends GetxController {
           .snapshots()
           .listen((onValue) {
         DocumentSnapshot categoryDoc = onValue.docs.first;
-        print(categoryDoc.reference);
+        DocumentReference categoryReference = categoryDoc.reference;
         FirebaseFirestore.instance
             .collection('Articles')
-            .where("category", isEqualTo: categoryDoc.reference.path)
+            .where("category", isEqualTo: categoryDoc.reference)
             .snapshots()
             .listen((onData) {
           allArticlesInSelectedCategory.value = onData.docs
               .map((e) =>
-                  ArticleModel.fromJson(jsonDecode(jsonEncode(e.data()))))
+                  ArticleModel.fromJson(e.data()))
               .toList();
         });
       });

@@ -62,7 +62,7 @@ class NewArticleGetController extends GetxController {
       ArticleModel articleModel = ArticleModel(
           name: titleController.text,
           htmlText: await quillEditorController.getText(),
-          category: categoryDoc.reference.path);
+          category: categoryDoc.reference);
       FirebaseFirestore.instance
           .collection('Articles')
           .add(articleModel.toJson())
