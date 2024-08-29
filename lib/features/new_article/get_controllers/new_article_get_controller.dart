@@ -17,6 +17,8 @@ class NewArticleGetController extends GetxController {
 
   TextEditingController titleController = TextEditingController();
 
+  FocusNode titleFocusNode = FocusNode();
+
   @override
   void onInit() {
     quillEditorController.onTextChanged((text) {
