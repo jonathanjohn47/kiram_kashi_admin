@@ -6,14 +6,15 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:meta/meta.dart';
 import 'dart:convert';
 
-ArticleModel articleModelFromJson(String str) => ArticleModel.fromJson(json.decode(str));
+ArticleModel articleModelFromJson(String str) =>
+    ArticleModel.fromJson(json.decode(str));
 
 String articleModelToJson(ArticleModel data) => json.encode(data.toJson());
 
 class ArticleModel {
   String name;
   String htmlText;
-  String category;
+  DocumentReference category;
 
   ArticleModel({
     required this.name,
@@ -24,7 +25,7 @@ class ArticleModel {
   ArticleModel copyWith({
     String? name,
     String? htmlText,
-    String? category,
+    DocumentReference? category,
   }) =>
       ArticleModel(
         name: name ?? this.name,
@@ -33,14 +34,15 @@ class ArticleModel {
       );
 
   factory ArticleModel.fromJson(Map<String, dynamic> json) => ArticleModel(
-    name: json["name"],
-    htmlText: json["htmlText"],
-    category: json["category"],
-  );
+        name: json["name"],
+        htmlText: json["htmlText"],
+        category: FirebaseFirestore.instance.doc(json["category"].path), // Convert string back to DocumentReference
+      );
 
   Map<String, dynamic> toJson() => {
     "name": name,
     "htmlText": htmlText,
-    "category": category,
+    "category":category,
   };
+
 }

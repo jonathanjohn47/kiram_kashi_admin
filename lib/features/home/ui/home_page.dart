@@ -57,7 +57,7 @@ class HomePage extends StatelessWidget {
             Positioned(
               bottom: 2.h,
               right: 2.h,
-              child: FloatingActionButton(
+              child: FloatingActionButton(heroTag: null,
                 onPressed: () {
                   Get.to(()=> NewCategoryPage());
                 },
@@ -117,7 +117,7 @@ class HomePage extends StatelessWidget {
                 Positioned(
                   bottom: 2.h,
                   right: 2.h,
-                  child: FloatingActionButton(
+                  child: FloatingActionButton(heroTag: null,
                     onPressed: () {
                       Get.to(() => NewArticlePage());
                     },
