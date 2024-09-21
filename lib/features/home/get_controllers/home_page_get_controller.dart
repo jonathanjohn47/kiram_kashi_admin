@@ -23,7 +23,10 @@ class HomePageGetController extends GetxController {
         selectedCategory.value = onData.first;
       }
     });
-    loadCategories();
+    Future.delayed(Duration(milliseconds: 200), () {
+      loadCategories();
+    });
+
     super.onInit();
   }
 
@@ -41,10 +44,8 @@ class HomePageGetController extends GetxController {
             .where("category", isEqualTo: categoryDoc.reference)
             .snapshots()
             .listen((onData) {
-          allArticlesInSelectedCategory.value = onData.docs
-              .map((e) =>
-                  ArticleModel.fromJson(e.data()))
-              .toList();
+          allArticlesInSelectedCategory.value =
+              onData.docs.map((e) => ArticleModel.fromJson(e.data())).toList();
         });
       });
     }
@@ -53,7 +54,7 @@ class HomePageGetController extends GetxController {
   void loadCategories() {
     FirebaseFirestore.instance
         .collection('Categories')
-        .orderBy("name")
+        .orderBy("id", descending: false)
         .snapshots()
         .listen((onData) {
       categories.value = onData.docs
