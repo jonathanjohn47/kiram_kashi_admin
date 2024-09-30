@@ -27,6 +27,7 @@ class HomePageGetController extends GetxController {
       loadCategories();
     });
 
+    //deleteDuplicateArticlesFromFirebase();
     super.onInit();
   }
 
@@ -140,4 +141,51 @@ class HomePageGetController extends GetxController {
           );
         });
   }
+
+  void arrangeArticles() {
+    Future.forEach(articleNamesAndTheirIndex.keys, (article) {
+      FirebaseFirestore.instance.collection("Articles").get().then((onValue) {
+        Future.forEach(onValue.docs, (doc) {
+          if (doc['name'].toLowerCase().contains(article.toLowerCase())) {
+            doc.reference.update({"index": articleNamesAndTheirIndex[article]});
+          }
+        });
+      });
+    });
+  }
+
+  void deleteDuplicateArticlesFromFirebase() {
+    FirebaseFirestore.instance.collection('Articles').get().then((onValue) {
+      Future.forEach(onValue.docs, (doc1) {
+        Future.forEach(onValue.docs, (doc2) {
+          if (doc1.reference != doc2.reference) {
+            if (doc1['name']
+                .toLowerCase()
+                .contains(doc2['name'].toLowerCase())) {
+              doc2.reference.delete();
+            }
+          }
+        });
+      });
+    });
+  }
 }
+
+Map<String, int> articleNamesAndTheirIndex = {
+  'Sa': 1,
+  'Mulberry t': 2,
+  'inp': 3,
+  'Major mulberry i': 1,
+  'Major mulberry d': 2,
+  'Integrated P': 3,
+  'Rearing ': 1,
+  'Env': 2,
+  'Qua': 3,
+  'Disi': 4,
+  'Mou': 5,
+  'Ha': 6,
+  'Dr': 7,
+  'Major S': 1,
+  'Integrated m': 2,
+  'Mai': 3
+};
