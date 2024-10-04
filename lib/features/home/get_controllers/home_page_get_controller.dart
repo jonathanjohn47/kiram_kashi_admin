@@ -12,6 +12,7 @@ class HomePageGetController extends GetxController {
   Rx<CategoryModel?> selectedCategory = Rx<CategoryModel?>(null);
 
   RxList<ArticleModel> allArticlesInSelectedCategory = <ArticleModel>[].obs;
+  RxList<DocumentReference> allArticlesReference = <DocumentReference>[].obs;
 
   @override
   void onInit() {
@@ -43,10 +44,13 @@ class HomePageGetController extends GetxController {
         FirebaseFirestore.instance
             .collection('Articles')
             .where("category", isEqualTo: categoryDoc.reference)
+            .orderBy("index", descending: false)
             .snapshots()
             .listen((onData) {
           allArticlesInSelectedCategory.value =
               onData.docs.map((e) => ArticleModel.fromJson(e.data())).toList();
+          allArticlesReference.value =
+              onData.docs.map((e) => e.reference).toList();
         });
       });
     }
@@ -62,6 +66,53 @@ class HomePageGetController extends GetxController {
           .map((e) => CategoryModel.fromJson(jsonDecode(jsonEncode(e.data()))))
           .toList();
     });
+  }
+
+  void incrementArticleIndex(
+      int zeroBasedIndex,
+      ) {
+    int currentArticleIndex = zeroBasedIndex + 1; // Convert zero-based index to one-based
+
+    if (currentArticleIndex < allArticlesInSelectedCategory.length) {
+      // Adjust logic to match one-based index
+      ArticleModel currentArticleModel =
+      allArticlesInSelectedCategory[zeroBasedIndex].copyWith(index: currentArticleIndex + 1);
+
+      ArticleModel nextArticleModel =
+      allArticlesInSelectedCategory[zeroBasedIndex + 1].copyWith(index: currentArticleIndex);
+
+      allArticlesReference[zeroBasedIndex]
+          .update(currentArticleModel.toJson())
+          .then((onValue) {});
+      allArticlesReference[zeroBasedIndex + 1]
+          .update(nextArticleModel.toJson())
+          .then((onValue) {});
+    }
+  }
+
+  void decrementArticleIndex(
+      int zeroBasedIndex,
+      ) {
+    int currentArticleIndex = zeroBasedIndex + 1; // Convert zero-based index to one-based
+
+    if (currentArticleIndex <= 1 || currentArticleIndex > allArticlesInSelectedCategory.length) {
+      // Handle edge case: invalid index for decrement
+      return;
+    }
+
+    // Indices in list are zero-based; adjust for one-based article index
+    ArticleModel currentArticleModel =
+    allArticlesInSelectedCategory[zeroBasedIndex].copyWith(index: currentArticleIndex - 1);
+
+    ArticleModel previousArticleModel =
+    allArticlesInSelectedCategory[zeroBasedIndex - 1].copyWith(index: currentArticleIndex);
+
+    allArticlesReference[zeroBasedIndex]
+        .update(currentArticleModel.toJson())
+        .then((onValue) {});
+    allArticlesReference[zeroBasedIndex - 1]
+        .update(previousArticleModel.toJson())
+        .then((onValue) {});
   }
 
   void deleteArticle(ArticleModel article) {
@@ -168,6 +219,13 @@ class HomePageGetController extends GetxController {
         });
       });
     });
+  }
+
+  void deleteArticles() {
+    List<String> articleNames = [
+      "3)Quality and quantity of mulberry leaf:-",
+      "4)"
+    ];
   }
 }
 

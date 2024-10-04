@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_sizer/flutter_sizer.dart';
 import 'package:get/get.dart';
-import 'package:quill_html_editor/quill_html_editor.dart';
 
 import '../get_controllers/new_article_get_controller.dart';
 
@@ -75,7 +74,7 @@ class NewArticlePage extends StatelessWidget {
                     },
                   ),
                   SizedBox(height: 1.h),
-                  Flexible(
+                  /*Flexible(
                     child: ToolBar(
                       toolBarColor: Colors.white,
                       padding: const EdgeInsets.all(8),
@@ -95,8 +94,8 @@ class NewArticlePage extends StatelessWidget {
                         ),
                       ],
                     ),
-                  ),
-                  Expanded(
+                  ),*/
+                  /*Expanded(
                     flex: 4,
                     child: GestureDetector(
                       onTap: () {
@@ -143,7 +142,7 @@ class NewArticlePage extends StatelessWidget {
 
                       ),
                     ),
-                  ),
+                  ),*/
                   Divider(
                     thickness: 0.5.h,
                     color: Colors.green,
@@ -152,7 +151,7 @@ class NewArticlePage extends StatelessWidget {
                     padding: const EdgeInsets.all(8.0),
                     child: ElevatedButton(
                       onPressed: () {
-                        getController.saveArticle();
+                        //getController.saveArticle();
                       },
                       child: Padding(
                         padding: const EdgeInsets.all(8.0),

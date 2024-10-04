@@ -15,34 +15,38 @@ class ArticleModel {
   String name;
   String htmlText;
   DocumentReference category;
+  int index;
 
   ArticleModel({
     required this.name,
     required this.htmlText,
     required this.category,
+    required this.index,
   });
 
   ArticleModel copyWith({
     String? name,
     String? htmlText,
     DocumentReference? category,
+    int? index,
   }) =>
       ArticleModel(
         name: name ?? this.name,
         htmlText: htmlText ?? this.htmlText,
         category: category ?? this.category,
+        index: index ?? this.index,
       );
 
   factory ArticleModel.fromJson(Map<String, dynamic> json) => ArticleModel(
-        name: json["name"],
-        htmlText: json["htmlText"],
-        category: FirebaseFirestore.instance.doc(json["category"].path), // Convert string back to DocumentReference
-      );
+      name: json["name"],
+      htmlText: json["htmlText"],
+      category: FirebaseFirestore.instance.doc(json["category"].path),
+      index: json["index"]);
 
   Map<String, dynamic> toJson() => {
-    "name": name,
-    "htmlText": htmlText,
-    "category":category,
-  };
-
+        "name": name,
+        "htmlText": htmlText,
+        "category": category,
+        "index": index
+      };
 }
